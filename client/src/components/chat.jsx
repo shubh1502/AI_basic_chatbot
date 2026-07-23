@@ -12,14 +12,10 @@ function Chat() {
     async function handleSend() {
         try {
             setLoading(true);
-            const userMessage = { role: "user", content: message };
-            setMessages((prevMessages) => [...prevMessages, userMessage]);
 
             const response = await api.post("/chat", { message });
             console.log(response.data);
 
-            const aiMessage = { role: "ai", content: response.data.response };
-            setMessages((prevMessages) => [...prevMessages, aiMessage]);
             setMessage("");
         } catch (error) {
             console.error("Error sending message:", error);
