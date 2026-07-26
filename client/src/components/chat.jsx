@@ -6,16 +6,20 @@ function Chat() {
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    //  useEffect(() => {
-    //   console.log(messages)
-    // }, [messages])
+     useEffect(() => {
+      console.log(messages)
+    }, [messages])
     async function handleSend() {
         try {
             setLoading(true);
+            const userMessage = { role: "user", content: message };
+            setMessages((prevMessages) => [...prevMessages, userMessage]);
 
             const response = await api.post("/chat", { message });
             console.log(response.data);
 
+            const aiMessage = { role: "ai", content: response.data.data };
+            setMessages((prevMessages) => [...prevMessages, aiMessage]);
             setMessage("");
         } catch (error) {
             console.error("Error sending message:", error);
