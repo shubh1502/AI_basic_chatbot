@@ -1,4 +1,10 @@
-import ai from "../config/ai.js";
+// import ai from "../config/ai.js";
+import { ChatGroq } from "@langchain/groq";
+
+const model = new ChatGroq({
+  apiKey: process.env.GROQ_API_KEY,
+  model: "llama-3.3-70b-versatile",
+});
 
 export async function generateResponse(messages) {
 let finalmessage = []
@@ -16,10 +22,8 @@ if(Array.isArray(messages)) {
   }
 
   console.log(finalmessage)
-    const response = await ai.chat.completions.create({
-        model: "llama-3.3-70b-versatile",
-        messages: finalmessage,
-    });
+    const response = await model.invoke(finalmessage);
+    console.log(`AI response: ${response.content}`);
 
-    return response.choices[0].message.content;
+    return response.content;
 }
