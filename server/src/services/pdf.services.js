@@ -2,6 +2,7 @@ import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
 import { splitDocuments } from "./splitter.services.js";
 import { createVectorStore } from "./vectordb.services.js";
 
+
 export async function loadPDF(filePath) {
   const loader = new PDFLoader(filePath);
 
@@ -16,4 +17,4 @@ export async function loadPDF(filePath) {
   console.log(results); 
 }
 
-loadPDF("../dummy_data/dummy_pdf_multipage.pdf");
+loadPDF("../dummy_data/Dummy_pdf.pdf");
