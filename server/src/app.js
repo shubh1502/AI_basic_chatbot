@@ -11,5 +11,6 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/chat", chatRoutes);
+app/use("/upload", uploadRoutes); // Add this line for the upload route
 
 export default app;

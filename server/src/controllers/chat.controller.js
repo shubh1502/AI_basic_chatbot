@@ -1,22 +1,19 @@
-import { generateResponse } from "../services/ai.services.js";
-import { saveMessage, getConversation } from "../services/chat.services_mongo.js";
-// import { addModelMessage, addUserMessage, getConversation } from "../services/chat.services.js";
+import chatService from "../services/chat.pipeline.js";
 
 export default async function chat(req, res) {
   try {
     const { message } = req.body;
-const userId = "demo-user";
-await saveMessage(userId, "user", message);
-const conversation = await getConversation(userId);
-const aiResponse = await generateResponse(conversation);
-await saveMessage(userId, "assistant", aiResponse);
+    const userId = "demo-user"; // Replace with authenticated user later
 
-res.json({
-    success: true,
-    data: aiResponse
-});
+    const aiResponse = await chatService(userId, message);
+
+    return res.status(200).json({
+      success: true,
+      data: aiResponse,
+    });
   } catch (error) {
-    console.error(error);
+    console.error("Chat Controller Error:", error);
+
     return res.status(500).json({
       success: false,
       message: "Internal Server Error",

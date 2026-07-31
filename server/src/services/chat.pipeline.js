@@ -1,8 +1,7 @@
 // import { generateResponse } from "./ai.service_old.js";
 import { generateResponse } from "./ai.service.js";
 import { saveMessage, getConversation } from "./chat.services_mongo.js";
-// We'll uncomment this after RAG integration
-// import { retriever } from "./rag/retriever.js";
+import { similaritySearch } from "./rag/vectordb.service.js";
 
 export default async function chatService(userId, message) {
     // 1. Save user message
@@ -10,11 +9,13 @@ export default async function chatService(userId, message) {
 
     // 2. Fetch conversation history
     let conversation = await getConversation(userId);
+    console.log("Conversation history:", conversation); 
     if (!conversation || conversation.length === 0) {
+        console.log("no converstaio History")
         conversation = [{ role: "user", content: message }];
         const aiResponse = await generateResponse(conversation);
     }
-    const relevantDocs = await retriever.invoke(message);
+    const relevantDocs = await similaritySearch(message, 3);
 
     const aiResponse = await generateResponse(
         conversation,

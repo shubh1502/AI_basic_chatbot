@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 dotenv.config();
+
 import { MemoryVectorStore } from "@langchain/classic/vectorstores/memory";
 import { HuggingFaceInferenceEmbeddings } from "@langchain/community/embeddings/hf";
 
@@ -8,9 +9,6 @@ const embeddingModel = new HuggingFaceInferenceEmbeddings({
   model: "BAAI/bge-small-en-v1.5",
 });
 
-
-console.log("HuggingFace API Key:", process.env.HUGGINGFACE_API_KEY);
-
 let vectorStore = null;
 
 export async function createVectorStore(chunks) {
@@ -18,6 +16,13 @@ export async function createVectorStore(chunks) {
     chunks,
     embeddingModel
   );
+}
 
-  return vectorStore.asRetriever();
+export async function similaritySearch(query, k = 3) {
+
+  if (!vectorStore) {
+    throw new Error("Vector Store not initialized");
+  }
+
+  return vectorStore.similaritySearch(query, k);
 }
