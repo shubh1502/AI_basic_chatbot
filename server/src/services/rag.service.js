@@ -1,5 +1,5 @@
 import {loadPDF} from "../loader/loader.js";
-import { splitDocuments } from "./rag/splitter.service.js";
+import { chunkDocuments } from "./rag/editor.service.js";
 import { createVectorStore } from "./rag/vectordb.service.js";
 
 
@@ -7,13 +7,12 @@ export async function ragservicepipeline(filePath) {
   const docs = await loadPDF(filePath);
 
 
-  const chunks = await splitDocuments(docs);
+  const chunks = await chunkDocuments(docs);
 
-  const vectorStore = await createVectorStore(chunks);  
+  const retriever = await createVectorStore(chunks);  
 //   console.log(chunks);
+return retriever;
 
-  const results = await vectorStore.similaritySearch("What is the purpose of this document?", 1);
-  console.log(results); 
 }
 
-loadPDF("../dummy_data/Dummy_pdf.pdf");
+console.log(await ragservicepipeline("../dummy_data/Dummy_pdf.pdf")); 

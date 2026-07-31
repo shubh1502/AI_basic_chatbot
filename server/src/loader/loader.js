@@ -1,9 +1,18 @@
 import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
 
 export async function loadPDF(filePath) {
-  const loader = new PDFLoader(filePath);
+    let docs = [];
+    try {
 
-  const docs = await loader.load();
+        const loader = new PDFLoader(filePath);
+         docs = await loader.load();
 
-  return docs;
+    } catch (error) {
+        console.error("Error loading PDF:", error.message);
+    } finally {
+        console.log(docs);
+        console.log("type of docs:", typeof docs);
+    }
+
+    return docs;
 }
